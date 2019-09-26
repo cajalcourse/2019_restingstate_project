@@ -13,6 +13,10 @@ Move your notebook into repo:
 
     cp [notebook.ipynb] project.ipynb  
 
+Make any changes and modify slideshow using __Jupyter Notebook__:  
+
+    jupyter notebook  
+
 Convert to slides and push to repo:  
 
     ./publish.sh  
