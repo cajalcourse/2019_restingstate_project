@@ -11,7 +11,7 @@ To setup:
 
 Move your notebook into repo:  
 
-    mv [notebook.ipynb] project.ipynb  
+    cp [notebook.ipynb] project.ipynb  
 
 Convert to slides and push to repo:  
 
