@@ -1,0 +1,150 @@
+Downloaded existing data set from here:
+https://openneuro.org/datasets/ds002080/versions/1.0.0
+Paper: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6001263/
+
+Post op patients (gliomas / meningiomas patients) and controls 
+
+https://nilearn.github.io/auto_examples/03_connectivity/plot_group_level_connectivity.html#sphx-glr-auto-examples-03-connectivity-plot-group-level-connectivity-py
+
+
+# Used docker to run a virtual machine to do preprocessing
+
+sudo docker run -ti --rm \
+  -v /data/rw_eleves/CajalProject12/ds002080-1.0.0:/data:ro \
+  -v /data/rw_eleves/CajalProject12/preproc:/out \
+  -v /data/rw_eleves/CajalProject12:/fs poldracklab/fmriprep:latest \
+  --fs-no-reconall  \
+  --output-spaces MNI152NLin2009cAsym \
+  --force-no-bbr \
+  --dummy-scans 4 \
+  --sloppy \
+  --notrack \
+  --n_cpus 6 \
+  --mem_mb 12000 \
+  --participant_label sub-PAT01 sub-CON02 \
+  --fs-license-file /fs/license.txt \
+  /data /out participant
+
+
+
+#Second attempt doing more of the fs processes
+sudo docker run -ti --rm \
+  -v /data/rw_eleves/CajalProject12/ds002080-1.0.0:/data:ro \
+  -v /data/rw_eleves/CajalProject12/preproc:/out \
+  -v /data/rw_eleves/CajalProject12/working:/working \
+  -v /data/rw_eleves/CajalProject12:/fs poldracklab/fmriprep:latest \
+  --output-spaces MNI152NLin2009cAsym \
+  --dummy-scans 4 \
+  --work-dir /working \
+  --notrack \
+  --n_cpus 6 \
+  --mem_mb 12000 \
+  --participant_label sub-PAT02 sub-CON03 \
+  --fs-license-file /fs/license.txt \
+  /data /out participant
+
+
+Tutorials on nilearn: https://brainhack101.github.io/introML-book/01/MAIN_tutorial_intro_to_nilearn.html
+
+
+
+Wiki on neuroimaging preprocessing: https://en.wikibooks.org/wiki/Neuroimaging_Data_Processing
+
+End of Day 1 :D
+
+---------------------
+
+Day 2
+After preprocessing, one output is a 'confounds' file.
+
+Using input_data.NiftiSpheresMasker (from nilearn) to define our seed (need to define the location, the size and whether or not to detrend or standardise the data; can also add bandpass filter and repetition time)
+
+Then fit a transform to the seed data which takes into account all your confounds (using fit_transform)
+
+Then use NiftiMasker for the rest of the whole brain to smooth, detrend etc. and fit_transform again for the whole brain data. 
+
+Take the dot product (using 'dot' from numpy) between the seed time series and the rest of the brain voxel time series. 
+
+Plotted the correlations over a certain threshold back on an image of the brain
+
+ - made a function to repeat this for any given coordinates. 
+
+
+----------
+
+Project ideas:
+
+1. ABIDE data set (ASD) https://nilearn.github.io/modules/generated/nilearn.datasets.fetch_abide_pcp.html#nilearn.datasets.fetch_abide_pcp
+
+Research q: Can we use machine learning to predict clinical group (with or without autism) from functional connectivity patterns (...)?
+
+Research q: Does IQ influence resting state connectivity in people with/without ASD differently? Is there an interaction between IQ and diagnostics?
+
+
+--
+To do Monday:
+Change script, files+folders need to be saved in corresponding PPN folder
+
+
+-----
+Day 3
+
+
+ABIDE Data preprocessing steps: http://preprocessed-connectomes-project.org/abide/cpac.html
+
+Data we downloaded were already preprocessed (see link above)
+
+Looked at seed-connectivity analysis on one test file. Found that we still needed to do the detrend and standardise options (even though these had been done already) in the NIFTI maskers otherwise we dont get results 
+
+
+We made the masker for each of the regions from oxford harvard atlas  in one dataset
+
+Then we calculated th econnecivity matrix between each region for one person
+
+Then we plotted the pos and neg values separately.
+Then we plotted the connectome for the subject.
+
+We fetched the data from ABIDE dataset. People from P'ttsburg are selected only. Defined the atlas we used and we used the mask.
+
+The we structerd the matrix. 
+
+------
+Day 4
+
+Quality assesments were based on automatic QC. http://preprocessed-connectomes-project.org/abide/quality_assessment.html
+
+Manual QA: 3 raters. It's vague. 
+
+------
+
+Day 5
+
+For presentation: 
+
+using the command line, activated the conda cajal' then jupyter notebook (cant make a pres from Jupyterlab)
+
+in he command line: jupyter nbconvert cajalcourse_day_extra\ \(copie\).ipynb --to slides --post serve
+
+
+
+
+
+https://www.nature.com/articles/s41467-019-08944-1#MOESM1 
+Atypical functional connectome hierarchy in autism
+Paper on ABIDE data
+
+https://link.springer.com/article/10.1007%2Fs10334-010-0228-5
+Resting developments: a review of fMRI post-processing methodologies for spontaneous brain activity
+
+
+-------
+Day 6
+
+
+a website to show your data in a magic way!
+https://gallantlab.org/huth2016/
+
+Hiding input in Jupyter notebook/lab presentation https://jupyter.org/jupyter-book/features/hiding.html
+
+
+
